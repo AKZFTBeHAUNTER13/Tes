@@ -1,44 +1,13 @@
-<form id="update-form">
-  <input type="file" id="file-input" required />
-  <button type="submit">Enviar</button>
-</form>
+// netlify/functions/getCode.js
+const fs = require('fs');
+const path = require('path');
 
-<script>
-  const form = document.getElementById('update-form');
-  const fileInput = document.getElementById('file-input');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const file = fileInput.files[0];
-    if (!file) {
-      alert('Selecione um arquivo!');
-      return;
-    }
-
-    // Ler o conteúdo do arquivo
-    const reader = new FileReader();
-    reader.onload = async function(event) {
-      const fileContent = event.target.result;
-
-      try {
-        const response = await fetch('/.netlify/functions/update-file', {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain' },
-          body: fileContent // Enviando o conteúdo do arquivo (o código)
-        });
-
-        const result = await response.json();
-        if (result.success) {
-          alert('Arquivo atualizado com sucesso!');
-        } else {
-          alert('Erro ao atualizar o arquivo!');
-        }
-      } catch (error) {
-        alert('Erro ao enviar o arquivo!');
-      }
-    };
-
-    reader.readAsText(file); // Lê o arquivo como texto
-  });
-</script>
+exports.handler = async function(event, context) {
+  const codeFilePath = path.resolve(__dirname, '../../files/code-example.txt');
+  const code = fs.readFileSync(codeFilePath, 'utf-8');
+  
+  return {
+    statusCode: 200,
+    body: code
+  };
+};
