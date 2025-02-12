@@ -25,7 +25,7 @@
         const response = await fetch('/.netlify/functions/update-file', {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain' },
-          body: fileContent
+          body: fileContent // Enviando o conteúdo do arquivo (o código)
         });
 
         const result = await response.json();
@@ -39,6 +39,6 @@
       }
     };
 
-    reader.readAsText(file);
+    reader.readAsText(file); // Lê o arquivo como texto
   });
 </script>
