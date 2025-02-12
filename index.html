@@ -1,29 +1,44 @@
-<form id="update-form" enctype="multipart/form-data">
-  <input type="file" name="file" id="file-input" required />
+<form id="update-form">
+  <input type="file" id="file-input" required />
   <button type="submit">Enviar</button>
 </form>
 
 <script>
   const form = document.getElementById('update-form');
+  const fileInput = document.getElementById('file-input');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(form);
-    try {
-      const response = await fetch('/.netlify/functions/update-file', {
-        method: 'POST',
-        body: formData
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        alert('Arquivo atualizado com sucesso!');
-      } else {
-        alert('Erro ao atualizar o arquivo!');
-      }
-    } catch (error) {
-      alert('Erro ao enviar o arquivo!');
+    const file = fileInput.files[0];
+    if (!file) {
+      alert('Selecione um arquivo!');
+      return;
     }
+
+    // Ler o conteúdo do arquivo
+    const reader = new FileReader();
+    reader.onload = async function(event) {
+      const fileContent = event.target.result;
+
+      try {
+        const response = await fetch('/.netlify/functions/update-file', {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' },
+          body: fileContent
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          alert('Arquivo atualizado com sucesso!');
+        } else {
+          alert('Erro ao atualizar o arquivo!');
+        }
+      } catch (error) {
+        alert('Erro ao enviar o arquivo!');
+      }
+    };
+
+    reader.readAsText(file);
   });
 </script>
