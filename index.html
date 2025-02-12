@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Armazenamento RAW</title>
+</head>
+<body>
+  <h1>Armazenamento RAW</h1>
+  <p><a href="PoisonHub" target="_blank">PoisonHub</a></p>
+
+  <h2>RAW Update</h2>
+  <form id="update-form" enctype="multipart/form-data">
+    <input type="file" name="file" id="file-input" required />
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('update-form');
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      try {
+        const response = await fetch('/.netlify/functions/update-file', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          alert('Arquivo atualizado com sucesso!');
+        } else {
+          alert('Erro ao atualizar o arquivo!');
+        }
+      } catch (error) {
+        alert('Erro ao enviar o arquivo!');
+      }
+    });
+  </script>
+</body>
+</html>
