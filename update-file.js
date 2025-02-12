@@ -23,7 +23,7 @@ exports.handler = async function(event) {
     // Caminho do arquivo PoisonHub (mude isso se necessário)
     const filePath = path.join(__dirname, '../../PoisonHub');
 
-    // Sobrescreve o arquivo PoisonHub com o novo conteúdo
+    // Sobrescreve o arquivo PoisonHub com o novo conteúdo (o código)
     fs.writeFileSync(filePath, newContent, 'utf8');
 
     return {
