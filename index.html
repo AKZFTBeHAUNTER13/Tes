@@ -1,13 +1,12 @@
-// netlify/functions/getCode.js
-const fs = require('fs');
-const path = require('path');
-
-exports.handler = async function(event, context) {
-  const codeFilePath = path.resolve(__dirname, '../../files/code-example.txt');
-  const code = fs.readFileSync(codeFilePath, 'utf-8');
-  
-  return {
-    statusCode: 200,
-    body: code
-  };
-};
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Armazenamento RAW</title>
+</head>
+<body>
+  <h1>Armazenamento RAW</h1>
+  <p><a href="PoisonHub" target="_blank">PoisonHub</a></p>
+</body>
+</html>
