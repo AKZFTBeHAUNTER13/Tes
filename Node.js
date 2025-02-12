@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-const GITHUB_TOKEN = 'SEU_NOVO_TOKEN_AQUI';
+const GIT_KEY = process.env.GIT_KEY; // Obtendo o token do arquivo .env
 const REPO_OWNER = 'AKZFTBeHAUNTER13';
 const REPO_NAME = 'Tes';
 const FILE_PATH = 'PoisonHub';
@@ -12,7 +12,7 @@ async function updateFile(newContent) {
     const getFileUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
     const getFileResponse = await fetch(getFileUrl, {
       headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
+        Authorization: `token ${GIT_KEY}`, // Usando o token da variável de ambiente
         Accept: 'application/vnd.github.v3+json',
       },
     });
@@ -29,7 +29,7 @@ async function updateFile(newContent) {
     const updateResponse = await fetch(updateFileUrl, {
       method: 'PUT',
       headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
+        Authorization: `token ${GIT_KEY}`, // Usando o token da variável de ambiente
         Accept: 'application/vnd.github.v3+json',
       },
       body: JSON.stringify({
