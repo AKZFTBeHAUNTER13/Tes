@@ -1,12 +1,44 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Armazenamento RAW</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload e Link Direto</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        input, button { padding: 10px; margin: 10px; }
+        #resultado { margin-top: 20px; font-weight: bold; word-break: break-all; }
+    </style>
 </head>
 <body>
-  <h1>Armazenamento RAW</h1>
-  <p><a href="PoisonHub" target="_blank">PoisonHub</a></p>
+
+    <h2>Upload de Arquivo</h2>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Enviar</button>
+    <p id="resultado"></p>
+
+    <script>
+        async function uploadFile() {
+            let file = document.getElementById("fileInput").files[0];
+            if (!file) return alert("Selecione um arquivo!");
+
+            let formData = new FormData();
+            formData.append("file", file);
+
+            let response = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            let data = await response.json();
+            if (data.url) {
+                document.getElementById("resultado").innerHTML = 
+                    `Link CDN: <a href="${data.url}" target="_blank">${data.url}</a>`;
+            } else {
+                alert("Erro no upload!");
+            }
+        }
+    </script>
+
 </body>
 </html>
