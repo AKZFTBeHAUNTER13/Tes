@@ -6,8 +6,9 @@
     <title>Upload e Link Direto</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-        input, button { padding: 10px; margin: 10px; }
-        #resultado { margin-top: 20px; font-weight: bold; word-break: break-all; }
+        input, button { padding: 10px; margin: 10px; width: 80%; max-width: 400px; }
+        #resultado { margin-top: 20px; font-weight: bold; word-break: break-word; }
+        .copy-box { display: none; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -15,7 +16,15 @@
     <h2>Upload de Arquivo</h2>
     <input type="file" id="fileInput">
     <button onclick="uploadFile()">Enviar</button>
+    
     <p id="resultado"></p>
+
+    <!-- Caixa para exibir e copiar o ID do arquivo -->
+    <div class="copy-box" id="copyBox">
+        <p><strong>ID do Arquivo:</strong></p>
+        <input type="text" id="fileId" readonly>
+        <button onclick="copyFileId()">Copiar</button>
+    </div>
 
     <script>
         async function uploadFile() {
@@ -34,9 +43,22 @@
             if (data.url) {
                 document.getElementById("resultado").innerHTML = 
                     `Link CDN: <a href="${data.url}" target="_blank">${data.url}</a>`;
+
+                // Pegando o ID do arquivo (última parte da URL)
+                let fileId = data.url.split('/').pop();
+                document.getElementById("fileId").value = fileId;
+                document.getElementById("copyBox").style.display = "block";
             } else {
                 alert("Erro no upload!");
             }
+        }
+
+        function copyFileId() {
+            let fileIdInput = document.getElementById("fileId");
+            fileIdInput.select();
+            fileIdInput.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            alert("ID copiado!");
         }
     </script>
 
