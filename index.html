@@ -1,69 +1,33 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload e Link Direto</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-        input, button { padding: 10px; margin: 10px; width: 80%; max-width: 400px; }
-        #resultado { margin-top: 20px; font-weight: bold; word-break: break-word; }
-        .copy-box { display: none; margin-top: 10px; }
-        #status { margin-top: 20px; color: green; }
-    </style>
+    <title>Leitor de Arquivo</title>
 </head>
 <body>
 
-    <h2>Upload de Arquivo</h2>
     <input type="file" id="fileInput">
-    <button onclick="uploadFile()">Enviar</button>
-    
-    <p id="resultado"></p>
-    <p id="status"></p>
-
-    <!-- Caixa para exibir e copiar o ID do arquivo -->
-    <div class="copy-box" id="copyBox">
-        <p><strong>ID do Arquivo:</strong></p>
-        <input type="text" id="fileId" readonly>
-        <button onclick="copyFileId()">Copiar Link</button>
-    </div>
+    <textarea id="output" rows="10" cols="50" readonly></textarea>
+    <button id="copyButton">Copiar</button>
 
     <script>
-        async function uploadFile() {
-            let file = document.getElementById("fileInput").files[0];
-            if (!file) return alert("Selecione um arquivo!");
-
-            let formData = new FormData();
-            formData.append("file", file);
-            document.getElementById("status").innerText = "Enviando...";
-
-            let response = await fetch("/upload", {
-                method: "POST",
-                body: formData
-            });
-
-            let data = await response.json();
-            if (data.url) {
-                document.getElementById("resultado").innerHTML = 
-                    `Link CDN: <a href="${data.url}" target="_blank">${data.url}</a>`;
-                
-                // Pegando o ID do arquivo (última parte da URL)
-                let fileId = data.url.split('/').pop();
-                document.getElementById("fileId").value = fileId;
-                document.getElementById("copyBox").style.display = "block";
-                document.getElementById("status").innerText = "Upload concluído!";
-            } else {
-                document.getElementById("status").innerText = "Erro no upload!";
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('output').value = e.target.result;
+                };
+                reader.readAsText(file);
             }
-        }
+        });
 
-        function copyFileId() {
-            let fileIdInput = document.getElementById("fileId");
-            fileIdInput.select();
-            fileIdInput.setSelectionRange(0, 99999);
-            document.execCommand("copy");
-            alert("Link copiado!");
-        }
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+        });
     </script>
 
 </body>
